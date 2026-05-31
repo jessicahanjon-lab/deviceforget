@@ -16,13 +16,15 @@ function Explore() {
       <header className="sticky top-0 z-30 pt-[env(safe-area-inset-top)] glass-strong">
         <div className="px-5 py-3">
           <h1 className="font-display text-3xl">Explore</h1>
-          <div className="mt-3 flex items-center gap-2 glass rounded-2xl px-3 py-2.5">
+          <Link
+            to="/wallpapers"
+            className="mt-3 flex items-center gap-2 glass rounded-2xl px-3 py-2.5"
+          >
             <Search className="w-4 h-4 text-muted-foreground" />
-            <input
-              placeholder="Search aesthetic, color, mood…"
-              className="bg-transparent outline-none text-sm flex-1 placeholder:text-muted-foreground"
-            />
-          </div>
+            <span className="text-sm text-muted-foreground flex-1">Search aesthetic, color, mood…</span>
+            <span className="text-[10px] font-semibold text-[var(--glow)]">FILTERS</span>
+          </Link>
+
         </div>
         <div className="flex gap-2 px-5 pb-3 overflow-x-auto no-scrollbar">
           {categories.map((c) => (
