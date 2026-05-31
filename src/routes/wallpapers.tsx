@@ -56,8 +56,10 @@ function Wallpapers() {
     [search],
   );
 
-  const update = (patch: Partial<typeof search>) =>
-    navigate({ search: (prev) => ({ ...prev, ...patch }), replace: true });
+  type SearchState = typeof search;
+  const update = (patch: Partial<SearchState>) =>
+    navigate({ search: (prev: SearchState) => ({ ...prev, ...patch }), replace: true });
+
 
   const activeCount =
     (search.aesthetic ? 1 : 0) +
@@ -134,13 +136,14 @@ function Wallpapers() {
                 <Chip onClear={() => update({ aesthetic: "" })}>{search.aesthetic}</Chip>
               )}
               {search.mood && <Chip onClear={() => update({ mood: "" })}>{search.mood}</Chip>}
-              {search.colors.map((c) => {
+              {search.colors.map((c: string) => {
                 const b = colorBuckets.find((x) => x.id === c);
                 return (
                   <Chip
                     key={c}
-                    onClear={() => update({ colors: search.colors.filter((x) => x !== c) })}
+                    onClear={() => update({ colors: search.colors.filter((x: string) => x !== c) })}
                   >
+
                     <span className="w-2.5 h-2.5 rounded-full mr-1" style={{ background: b?.hex }} />
                     {b?.name}
                   </Chip>
