@@ -26,8 +26,9 @@ function Home() {
           </div>
           <div className="flex gap-2">
             <button className="w-10 h-10 rounded-full glass flex items-center justify-center">
-              <Search className="w-4 h-4" />
+              <Link to="/wallpapers"><Search className="w-4 h-4" /></Link>
             </button>
+
             <button className="w-10 h-10 rounded-full glass flex items-center justify-center relative">
               <Bell className="w-4 h-4" />
               <span className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-[var(--glow)]" />
