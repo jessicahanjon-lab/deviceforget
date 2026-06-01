@@ -10,15 +10,22 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WallpapersRouteImport } from './routes/wallpapers'
+import { Route as UploadRouteImport } from './routes/upload'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as CustomizeRouteImport } from './routes/customize'
 import { Route as CommunityRouteImport } from './routes/community'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 
 const WallpapersRoute = WallpapersRouteImport.update({
   id: '/wallpapers',
   path: '/wallpapers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UploadRoute = UploadRouteImport.update({
+  id: '/upload',
+  path: '/upload',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProfileRoute = ProfileRouteImport.update({
@@ -41,6 +48,11 @@ const CommunityRoute = CommunityRouteImport.update({
   path: '/community',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -49,62 +61,76 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/community': typeof CommunityRoute
   '/customize': typeof CustomizeRoute
   '/explore': typeof ExploreRoute
   '/profile': typeof ProfileRoute
+  '/upload': typeof UploadRoute
   '/wallpapers': typeof WallpapersRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/community': typeof CommunityRoute
   '/customize': typeof CustomizeRoute
   '/explore': typeof ExploreRoute
   '/profile': typeof ProfileRoute
+  '/upload': typeof UploadRoute
   '/wallpapers': typeof WallpapersRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/community': typeof CommunityRoute
   '/customize': typeof CustomizeRoute
   '/explore': typeof ExploreRoute
   '/profile': typeof ProfileRoute
+  '/upload': typeof UploadRoute
   '/wallpapers': typeof WallpapersRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auth'
     | '/community'
     | '/customize'
     | '/explore'
     | '/profile'
+    | '/upload'
     | '/wallpapers'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/auth'
     | '/community'
     | '/customize'
     | '/explore'
     | '/profile'
+    | '/upload'
     | '/wallpapers'
   id:
     | '__root__'
     | '/'
+    | '/auth'
     | '/community'
     | '/customize'
     | '/explore'
     | '/profile'
+    | '/upload'
     | '/wallpapers'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRoute
   CommunityRoute: typeof CommunityRoute
   CustomizeRoute: typeof CustomizeRoute
   ExploreRoute: typeof ExploreRoute
   ProfileRoute: typeof ProfileRoute
+  UploadRoute: typeof UploadRoute
   WallpapersRoute: typeof WallpapersRoute
 }
 
@@ -115,6 +141,13 @@ declare module '@tanstack/react-router' {
       path: '/wallpapers'
       fullPath: '/wallpapers'
       preLoaderRoute: typeof WallpapersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/upload': {
+      id: '/upload'
+      path: '/upload'
+      fullPath: '/upload'
+      preLoaderRoute: typeof UploadRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/profile': {
@@ -145,6 +178,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CommunityRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -157,10 +197,12 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRoute: AuthRoute,
   CommunityRoute: CommunityRoute,
   CustomizeRoute: CustomizeRoute,
   ExploreRoute: ExploreRoute,
   ProfileRoute: ProfileRoute,
+  UploadRoute: UploadRoute,
   WallpapersRoute: WallpapersRoute,
 }
 export const routeTree = rootRouteImport

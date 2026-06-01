@@ -14,7 +14,108 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string
+          display_name: string | null
+          id: string
+          updated_at: string
+          username: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          display_name?: string | null
+          id: string
+          updated_at?: string
+          username?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+          username?: string | null
+        }
+        Relationships: []
+      }
+      user_media: {
+        Row: {
+          aesthetic: string | null
+          created_at: string
+          description: string | null
+          dominant_colors: string[] | null
+          download_count: number
+          file_size_bytes: number | null
+          height: number | null
+          id: string
+          kind: Database["public"]["Enums"]["media_kind"]
+          like_count: number
+          mime_type: string
+          moderation: Database["public"]["Enums"]["moderation_status"]
+          mood: string | null
+          owner_id: string
+          storage_path: string
+          tags: string[] | null
+          thumb_path: string | null
+          title: string
+          updated_at: string
+          visibility: Database["public"]["Enums"]["media_visibility"]
+          width: number | null
+        }
+        Insert: {
+          aesthetic?: string | null
+          created_at?: string
+          description?: string | null
+          dominant_colors?: string[] | null
+          download_count?: number
+          file_size_bytes?: number | null
+          height?: number | null
+          id?: string
+          kind?: Database["public"]["Enums"]["media_kind"]
+          like_count?: number
+          mime_type: string
+          moderation?: Database["public"]["Enums"]["moderation_status"]
+          mood?: string | null
+          owner_id: string
+          storage_path: string
+          tags?: string[] | null
+          thumb_path?: string | null
+          title: string
+          updated_at?: string
+          visibility?: Database["public"]["Enums"]["media_visibility"]
+          width?: number | null
+        }
+        Update: {
+          aesthetic?: string | null
+          created_at?: string
+          description?: string | null
+          dominant_colors?: string[] | null
+          download_count?: number
+          file_size_bytes?: number | null
+          height?: number | null
+          id?: string
+          kind?: Database["public"]["Enums"]["media_kind"]
+          like_count?: number
+          mime_type?: string
+          moderation?: Database["public"]["Enums"]["moderation_status"]
+          mood?: string | null
+          owner_id?: string
+          storage_path?: string
+          tags?: string[] | null
+          thumb_path?: string | null
+          title?: string
+          updated_at?: string
+          visibility?: Database["public"]["Enums"]["media_visibility"]
+          width?: number | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +124,9 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      media_kind: "wallpaper" | "theme"
+      media_visibility: "private" | "unlisted" | "public"
+      moderation_status: "pending" | "approved" | "rejected"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +253,10 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      media_kind: ["wallpaper", "theme"],
+      media_visibility: ["private", "unlisted", "public"],
+      moderation_status: ["pending", "approved", "rejected"],
+    },
   },
 } as const
