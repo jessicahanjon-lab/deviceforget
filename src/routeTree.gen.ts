@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WallpapersRouteImport } from './routes/wallpapers'
+import { Route as UploadRouteImport } from './routes/upload'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as CustomizeRouteImport } from './routes/customize'
@@ -20,6 +21,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const WallpapersRoute = WallpapersRouteImport.update({
   id: '/wallpapers',
   path: '/wallpapers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UploadRoute = UploadRouteImport.update({
+  id: '/upload',
+  path: '/upload',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProfileRoute = ProfileRouteImport.update({
@@ -60,6 +66,7 @@ export interface FileRoutesByFullPath {
   '/customize': typeof CustomizeRoute
   '/explore': typeof ExploreRoute
   '/profile': typeof ProfileRoute
+  '/upload': typeof UploadRoute
   '/wallpapers': typeof WallpapersRoute
 }
 export interface FileRoutesByTo {
@@ -69,6 +76,7 @@ export interface FileRoutesByTo {
   '/customize': typeof CustomizeRoute
   '/explore': typeof ExploreRoute
   '/profile': typeof ProfileRoute
+  '/upload': typeof UploadRoute
   '/wallpapers': typeof WallpapersRoute
 }
 export interface FileRoutesById {
@@ -79,6 +87,7 @@ export interface FileRoutesById {
   '/customize': typeof CustomizeRoute
   '/explore': typeof ExploreRoute
   '/profile': typeof ProfileRoute
+  '/upload': typeof UploadRoute
   '/wallpapers': typeof WallpapersRoute
 }
 export interface FileRouteTypes {
@@ -90,6 +99,7 @@ export interface FileRouteTypes {
     | '/customize'
     | '/explore'
     | '/profile'
+    | '/upload'
     | '/wallpapers'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -99,6 +109,7 @@ export interface FileRouteTypes {
     | '/customize'
     | '/explore'
     | '/profile'
+    | '/upload'
     | '/wallpapers'
   id:
     | '__root__'
@@ -108,6 +119,7 @@ export interface FileRouteTypes {
     | '/customize'
     | '/explore'
     | '/profile'
+    | '/upload'
     | '/wallpapers'
   fileRoutesById: FileRoutesById
 }
@@ -118,6 +130,7 @@ export interface RootRouteChildren {
   CustomizeRoute: typeof CustomizeRoute
   ExploreRoute: typeof ExploreRoute
   ProfileRoute: typeof ProfileRoute
+  UploadRoute: typeof UploadRoute
   WallpapersRoute: typeof WallpapersRoute
 }
 
@@ -128,6 +141,13 @@ declare module '@tanstack/react-router' {
       path: '/wallpapers'
       fullPath: '/wallpapers'
       preLoaderRoute: typeof WallpapersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/upload': {
+      id: '/upload'
+      path: '/upload'
+      fullPath: '/upload'
+      preLoaderRoute: typeof UploadRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/profile': {
@@ -182,6 +202,7 @@ const rootRouteChildren: RootRouteChildren = {
   CustomizeRoute: CustomizeRoute,
   ExploreRoute: ExploreRoute,
   ProfileRoute: ProfileRoute,
+  UploadRoute: UploadRoute,
   WallpapersRoute: WallpapersRoute,
 }
 export const routeTree = rootRouteImport
