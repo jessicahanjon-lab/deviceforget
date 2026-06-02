@@ -101,13 +101,20 @@ function EditMediaPage() {
     let cancelled = false;
     (async () => {
       setLoadingRow(true);
-      const { data, error } = await supabase
-        .from("user_media")
-        .select(
-          "id, owner_id, kind, title, description, storage_path, thumb_path, width, height, dominant_colors, aesthetic, mood, tags, visibility",
-        )
-        .eq("id", id)
-        .maybeSingle();
+      const [{ data, error }, { data: logsData, error: logsErr }] = await Promise.all([
+        supabase
+          .from("user_media")
+          .select(
+            "id, owner_id, kind, title, description, storage_path, thumb_path, width, height, dominant_colors, aesthetic, mood, tags, visibility, moderation, created_at, updated_at",
+          )
+          .eq("id", id)
+          .maybeSingle(),
+        supabase
+          .from("moderation_logs")
+          .select("id, from_status, to_status, created_at, reason")
+          .eq("media_id", id)
+          .order("created_at", { ascending: true }),
+      ]);
       if (cancelled) return;
       if (error || !data) {
         toast.error(error?.message ?? "Upload not found.");
@@ -123,6 +130,7 @@ function EditMediaPage() {
       setMood(r.mood ?? "");
       setTagsInput((r.tags ?? []).join(", "));
       setVisibility(r.visibility);
+      setLogs((logsData ?? []) as LogRow[]);
       const url = await getSignedUrl(r.thumb_path ?? r.storage_path, 3600);
       if (!cancelled) {
         setCurrentUrl(url);
