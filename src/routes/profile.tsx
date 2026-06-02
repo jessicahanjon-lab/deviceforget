@@ -38,6 +38,7 @@ type Media = {
   moderation: "pending" | "approved" | "rejected";
   dominant_colors: string[] | null;
   created_at: string;
+  updated_at: string;
 };
 
 function Profile() {
