@@ -274,10 +274,17 @@ function UploadsGrid({
       </div>
     );
   }
+  const navigate = useNavigate();
   return (
     <div className="grid grid-cols-3 gap-1 mt-1 px-1">
       {items.map((m) => (
-        <div key={m.id} className="relative aspect-[3/4] overflow-hidden rounded-lg bg-card">
+        <button
+          key={m.id}
+          type="button"
+          onClick={() => navigate({ to: "/media/$id/edit", params: { id: m.id } })}
+          className="relative aspect-[3/4] overflow-hidden rounded-lg bg-card text-left"
+          aria-label={`Edit ${m.title}`}
+        >
           {m.thumbUrl ? (
             <img src={m.thumbUrl} alt={m.title} className="w-full h-full object-cover" loading="lazy" />
           ) : (
@@ -301,7 +308,7 @@ function UploadsGrid({
               In review
             </div>
           )}
-        </div>
+        </button>
       ))}
     </div>
   );
