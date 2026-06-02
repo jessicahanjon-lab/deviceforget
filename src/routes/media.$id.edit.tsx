@@ -170,9 +170,8 @@ function EditMediaPage() {
         .filter((t) => t.length > 0 && t.length <= 32)
         .slice(0, 10);
 
-      type MediaUpdate = Parameters<
-        ReturnType<typeof supabase.from<"user_media">>["update"]
-      >[0];
+      type MediaUpdate =
+        import("@/integrations/supabase/types").Database["public"]["Tables"]["user_media"]["Update"];
       const update: MediaUpdate = {
         title: title.trim().slice(0, 120),
         description: description.trim().slice(0, 600) || null,
