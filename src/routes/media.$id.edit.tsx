@@ -170,7 +170,10 @@ function EditMediaPage() {
         .filter((t) => t.length > 0 && t.length <= 32)
         .slice(0, 10);
 
-      const update: Record<string, unknown> = {
+      type MediaUpdate = Parameters<
+        ReturnType<typeof supabase.from<"user_media">>["update"]
+      >[0];
+      const update: MediaUpdate = {
         title: title.trim().slice(0, 120),
         description: description.trim().slice(0, 600) || null,
         kind,
