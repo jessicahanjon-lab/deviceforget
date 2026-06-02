@@ -10,6 +10,11 @@ import {
   Sparkles,
   RefreshCw,
   Trash2,
+  Clock,
+  CheckCircle2,
+  XCircle,
+  AlertCircle,
+  Upload,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/use-auth";
