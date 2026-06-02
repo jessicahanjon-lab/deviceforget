@@ -14,6 +14,10 @@ import {
   Lock,
   Globe,
   Eye,
+  Clock,
+  CheckCircle2,
+  XCircle,
+  AlertCircle,
 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
