@@ -17,6 +17,7 @@ import { Route as CustomizeRouteImport } from './routes/customize'
 import { Route as CommunityRouteImport } from './routes/community'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as MediaIdEditRouteImport } from './routes/media.$id.edit'
 
 const WallpapersRoute = WallpapersRouteImport.update({
   id: '/wallpapers',
@@ -58,6 +59,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MediaIdEditRoute = MediaIdEditRouteImport.update({
+  id: '/media/$id/edit',
+  path: '/media/$id/edit',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -68,6 +74,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof ProfileRoute
   '/upload': typeof UploadRoute
   '/wallpapers': typeof WallpapersRoute
+  '/media/$id/edit': typeof MediaIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -78,6 +85,7 @@ export interface FileRoutesByTo {
   '/profile': typeof ProfileRoute
   '/upload': typeof UploadRoute
   '/wallpapers': typeof WallpapersRoute
+  '/media/$id/edit': typeof MediaIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -89,6 +97,7 @@ export interface FileRoutesById {
   '/profile': typeof ProfileRoute
   '/upload': typeof UploadRoute
   '/wallpapers': typeof WallpapersRoute
+  '/media/$id/edit': typeof MediaIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -101,6 +110,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/upload'
     | '/wallpapers'
+    | '/media/$id/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -111,6 +121,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/upload'
     | '/wallpapers'
+    | '/media/$id/edit'
   id:
     | '__root__'
     | '/'
@@ -121,6 +132,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/upload'
     | '/wallpapers'
+    | '/media/$id/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -132,6 +144,7 @@ export interface RootRouteChildren {
   ProfileRoute: typeof ProfileRoute
   UploadRoute: typeof UploadRoute
   WallpapersRoute: typeof WallpapersRoute
+  MediaIdEditRoute: typeof MediaIdEditRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -192,6 +205,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/media/$id/edit': {
+      id: '/media/$id/edit'
+      path: '/media/$id/edit'
+      fullPath: '/media/$id/edit'
+      preLoaderRoute: typeof MediaIdEditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -204,6 +224,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProfileRoute: ProfileRoute,
   UploadRoute: UploadRoute,
   WallpapersRoute: WallpapersRoute,
+  MediaIdEditRoute: MediaIdEditRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
