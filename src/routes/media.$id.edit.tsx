@@ -90,6 +90,7 @@ function EditMediaPage() {
 
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [logs, setLogs] = useState<LogRow[]>([]);
 
   useEffect(() => {
     if (!loading && !user) navigate({ to: "/auth", replace: true });
