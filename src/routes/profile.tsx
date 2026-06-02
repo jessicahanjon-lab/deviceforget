@@ -14,6 +14,10 @@ import {
   Lock,
   Globe,
   Eye,
+  Clock,
+  CheckCircle2,
+  XCircle,
+  AlertCircle,
 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
@@ -34,6 +38,7 @@ type Media = {
   moderation: "pending" | "approved" | "rejected";
   dominant_colors: string[] | null;
   created_at: string;
+  updated_at: string;
 };
 
 function Profile() {
@@ -61,7 +66,7 @@ function Profile() {
       const { data, error } = await supabase
         .from("user_media")
         .select(
-          "id, title, storage_path, thumb_path, visibility, moderation, dominant_colors, created_at",
+          "id, title, storage_path, thumb_path, visibility, moderation, dominant_colors, created_at, updated_at",
         )
         .eq("owner_id", user!.id)
         .order("created_at", { ascending: false });
@@ -252,7 +257,7 @@ function UploadsGrid({
   items,
   loading,
 }: {
-  items: { id: string; title: string; thumbUrl: string | null; visibility: string; moderation: string; dominant_colors: string[] | null }[];
+  items: { id: string; title: string; thumbUrl: string | null; visibility: string; moderation: string; dominant_colors: string[] | null; updated_at: string }[];
   loading: boolean;
 }) {
   if (loading) {
@@ -269,12 +274,46 @@ function UploadsGrid({
       <div className="px-5 py-12 text-center">
         <div className="font-display text-lg">No uploads yet</div>
         <p className="text-sm text-muted-foreground mt-1">
-          Tap “Upload wallpaper” to add your first one.
+          Tap "Upload wallpaper" to add your first one.
         </p>
       </div>
     );
   }
   const navigate = useNavigate();
+
+  const timeAgo = (iso: string) => {
+    const diff = Date.now() - new Date(iso).getTime();
+    const mins = Math.floor(diff / 60000);
+    const hrs = Math.floor(diff / 3600000);
+    const days = Math.floor(diff / 86400000);
+    if (days > 0) return `${days}d ago`;
+    if (hrs > 0) return `${hrs}h ago`;
+    if (mins > 0) return `${mins}m ago`;
+    return "just now";
+  };
+
+  const moderationBadge = (mod: string, updated: string) => {
+    if (mod === "approved") {
+      return (
+        <div className="absolute bottom-1.5 left-1.5 px-1.5 py-0.5 rounded-full text-[9px] bg-emerald-500/90 text-background font-medium flex items-center gap-1">
+          <CheckCircle2 className="w-2.5 h-2.5" /> Approved · {timeAgo(updated)}
+        </div>
+      );
+    }
+    if (mod === "rejected") {
+      return (
+        <div className="absolute bottom-1.5 left-1.5 px-1.5 py-0.5 rounded-full text-[9px] bg-rose-500/90 text-background font-medium flex items-center gap-1">
+          <XCircle className="w-2.5 h-2.5" /> Rejected · {timeAgo(updated)}
+        </div>
+      );
+    }
+    return (
+      <div className="absolute bottom-1.5 left-1.5 px-1.5 py-0.5 rounded-full text-[9px] bg-amber-500/90 text-background font-medium flex items-center gap-1">
+        <AlertCircle className="w-2.5 h-2.5" /> In review · {timeAgo(updated)}
+      </div>
+    );
+  };
+
   return (
     <div className="grid grid-cols-3 gap-1 mt-1 px-1">
       {items.map((m) => (
@@ -303,11 +342,7 @@ function UploadsGrid({
             {m.visibility === "unlisted" && <Eye className="w-3 h-3" />}
             {m.visibility === "public" && <Globe className="w-3 h-3" />}
           </div>
-          {m.visibility === "public" && m.moderation === "pending" && (
-            <div className="absolute bottom-1.5 left-1.5 px-1.5 py-0.5 rounded-full text-[9px] bg-amber-500/90 text-background font-medium">
-              In review
-            </div>
-          )}
+          {m.visibility === "public" && moderationBadge(m.moderation, m.updated_at)}
         </button>
       ))}
     </div>
