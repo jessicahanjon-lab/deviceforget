@@ -496,6 +496,9 @@ function EditMediaPage() {
           </p>
         </div>
 
+        {/* Moderation status timeline */}
+        {row && visibility === "public" && <ModerationTimeline row={row} logs={logs} />}
+
         <button
           type="submit"
           disabled={saving || deleting || optimizing}
@@ -510,6 +513,130 @@ function EditMediaPage() {
           )}
         </button>
       </form>
+    </div>
+  );
+}
+
+function ModerationTimeline({ row, logs }: { row: MediaRow; logs: LogRow[] }) {
+  const allEvents: {
+    status: "pending" | "approved" | "rejected";
+    label: string;
+    time: string;
+    icon: React.ElementType;
+    color: string;
+    bg: string;
+  }[] = [];
+
+  // Upload created event
+  allEvents.push({
+    status: row.moderation,
+    label: `Upload created · ${row.moderation}`,
+    time: row.created_at,
+    icon: Upload,
+    color: "text-muted-foreground",
+    bg: "bg-muted",
+  });
+
+  // Logged transitions
+  for (const log of logs) {
+    const label = log.from_status
+      ? `${log.from_status} → ${log.to_status}`
+      : `Initial · ${log.to_status}`;
+    allEvents.push({
+      status: log.to_status,
+      label,
+      time: log.created_at,
+      icon: log.to_status === "approved" ? CheckCircle2 : log.to_status === "rejected" ? XCircle : AlertCircle,
+      color:
+        log.to_status === "approved"
+          ? "text-emerald-400"
+          : log.to_status === "rejected"
+          ? "text-rose-400"
+          : "text-amber-400",
+      bg:
+        log.to_status === "approved"
+          ? "bg-emerald-500/20"
+          : log.to_status === "rejected"
+          ? "bg-rose-500/20"
+          : "bg-amber-500/20",
+    });
+  }
+
+  // If no logs but moderation is not pending, add current status as the latest event
+  if (logs.length === 0 && row.moderation !== "pending") {
+    allEvents.push({
+      status: row.moderation,
+      label: `Current · ${row.moderation}`,
+      time: row.updated_at,
+      icon: row.moderation === "approved" ? CheckCircle2 : XCircle,
+      color: row.moderation === "approved" ? "text-emerald-400" : "text-rose-400",
+      bg: row.moderation === "approved" ? "bg-emerald-500/20" : "bg-rose-500/20",
+    });
+  }
+
+  // Always add current status as the final event if there are logs and the last log doesn't match current moderation
+  const lastLog = logs[logs.length - 1];
+  if (lastLog && lastLog.to_status !== row.moderation) {
+    allEvents.push({
+      status: row.moderation,
+      label: `Current · ${row.moderation}`,
+      time: row.updated_at,
+      icon: row.moderation === "approved" ? CheckCircle2 : row.moderation === "rejected" ? XCircle : AlertCircle,
+      color:
+        row.moderation === "approved"
+          ? "text-emerald-400"
+          : row.moderation === "rejected"
+          ? "text-rose-400"
+          : "text-amber-400",
+      bg:
+        row.moderation === "approved"
+          ? "bg-emerald-500/20"
+          : row.moderation === "rejected"
+          ? "bg-rose-500/20"
+          : "bg-amber-500/20",
+    });
+  }
+
+  const fmt = (iso: string) =>
+    new Date(iso).toLocaleString(undefined, {
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+  return (
+    <div className="rounded-3xl glass p-5 space-y-4">
+      <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground">
+        <Clock className="w-3.5 h-3.5" /> Moderation timeline
+      </div>
+      <div className="relative pl-2">
+        {allEvents.map((evt, i) => {
+          const isLast = i === allEvents.length - 1;
+          const Icon = evt.icon;
+          return (
+            <div key={i} className="relative flex gap-3 pb-5 last:pb-0">
+              {/* Connector line */}
+              {!isLast && (
+                <div className="absolute left-[11px] top-6 bottom-0 w-px bg-border" />
+              )}
+              {/* Dot */}
+              <div
+                className={`relative z-10 mt-0.5 w-6 h-6 rounded-full flex items-center justify-center shrink-0 ${evt.bg}`}
+              >
+                <Icon className={`w-3.5 h-3.5 ${evt.color}`} />
+              </div>
+              {/* Content */}
+              <div className="flex-1 min-w-0">
+                <div className="text-sm font-medium capitalize">{evt.label}</div>
+                <div className="text-[11px] text-muted-foreground mt-0.5 flex items-center gap-1">
+                  <Clock className="w-3 h-3" /> {fmt(evt.time)}
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
