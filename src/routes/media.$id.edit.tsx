@@ -50,6 +50,17 @@ type MediaRow = {
   mood: string | null;
   tags: string[] | null;
   visibility: Visibility;
+  moderation: "pending" | "approved" | "rejected";
+  created_at: string;
+  updated_at: string;
+};
+
+type LogRow = {
+  id: string;
+  from_status: "pending" | "approved" | "rejected" | null;
+  to_status: "pending" | "approved" | "rejected";
+  created_at: string;
+  reason: string | null;
 };
 
 function EditMediaPage() {
