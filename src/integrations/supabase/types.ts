@@ -14,6 +14,44 @@ export type Database = {
   }
   public: {
     Tables: {
+      moderation_logs: {
+        Row: {
+          changed_by: string | null
+          created_at: string
+          from_status: Database["public"]["Enums"]["moderation_status"] | null
+          id: string
+          media_id: string
+          reason: string | null
+          to_status: Database["public"]["Enums"]["moderation_status"]
+        }
+        Insert: {
+          changed_by?: string | null
+          created_at?: string
+          from_status?: Database["public"]["Enums"]["moderation_status"] | null
+          id?: string
+          media_id: string
+          reason?: string | null
+          to_status: Database["public"]["Enums"]["moderation_status"]
+        }
+        Update: {
+          changed_by?: string | null
+          created_at?: string
+          from_status?: Database["public"]["Enums"]["moderation_status"] | null
+          id?: string
+          media_id?: string
+          reason?: string | null
+          to_status?: Database["public"]["Enums"]["moderation_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "moderation_logs_media_id_fkey"
+            columns: ["media_id"]
+            isOneToOne: false
+            referencedRelation: "user_media"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
